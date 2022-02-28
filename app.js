@@ -41,8 +41,9 @@ app.post('/chat_id', async (req,res)=>{
 app.post('/chats_user', async (req,res)=>{
   let id = req.body.id
   let datos = await chatService.chatsByUser(id)
-  console.log(datos)
-  res.send(datos) 
+  let salida = await chatService.chatsClean(datos, id)
+  console.log(salida)
+  res.send(salida) 
 })
 app.post('/enviar_mensaje', async (req,res)=>{
   await chatService.enviarMensaje(req.body)

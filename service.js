@@ -22,7 +22,16 @@ class Chat{
     chatsByUser(actualUserId){
     
         var query = {$or: [ {'user1': {$eq: actualUserId}  }, {'user2': {$eq: actualUserId}  } ]  }
-        var query1 = {$and: [query ,  {'Visibilidad': true}, {'ultimoMensaje': -1} ] }
+        var query1 = {$and: [query ,  {'Visibilidad': true}, {'bloqueo': false}] }
+        /*return this.dbClient.then(db=>db
+            .collection('match')
+            .find(query1)
+            .limit(25)
+            .sort({_id: -1})
+            .toArray()
+        )*/
+
+
         return this.dbClient.then(db=>db
             .collection('match')
             .find(query1)
@@ -30,6 +39,19 @@ class Chat{
             .sort({_id: -1})
             .toArray()
         )
+    }
+
+    chatsClean(data, miId){
+        for (let i = 0; i < data.length; i++){
+            let dato = data[i]
+            if(dato.user1 == miId){
+                data[i].user =  dato.datos2
+            }else{
+                data[i].user = dato.datos1
+            }
+            //console.log(data[i].user.idUser, 'hola')
+        }
+        return data
     }
 
     chatsId(id){
